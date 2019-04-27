@@ -1,18 +1,39 @@
+const axios = require('axios')
 const connection = require('../../database/mysql')
+const apiKey = require('../../setting/db/config').googleMapKey
+const googleMapApi = `https://maps.googleapis.com/maps/api/directions/json?`
 
-// connection.query('DROP TABLE restaurant')
-
-// connection.query('CREATE TABLE IF NOT EXISTS restaurant (id INT(10) PRIMARY KEY AUTO_INCREMENT, name VARCHAR(30) NOT NULL, lat FLOAT(6, 3) NOT NULL, lng FLOAT(5, 3) NOT NULL)')
-
-const getAllRestaurant =  () => {
+const getAllRestaurant = (lat, lng) => {
   return new Promise((resolve, reject) => {
     connection.query(
       'SELECT name, address, lat, lng FROM restaurant',
-      (err, rows, fields) => {
+      async (err, rows, fields) => {
         if (err) reject(err)
-        else resolve(rows)
+        else {
+          try {
+            for (let i = 0; i < rows.length; i++) {
+              rows[i].distance = await addDuration(lat, lng, rows[i].lat, rows[i].lng)
+            }
+            resolve(rows)
+          } catch(e) {
+            reject(e)
+          }
+        }
       }
     )
+  })
+}
+
+const addDuration = (olat, olng, dlat, dlng) => {
+  return new Promise((resolve, reject) => {
+    axios.get(`${googleMapApi}origin=${olat},${olng}&destination=${dlng},${dlat}&key=${apiKey}`)
+      .then(result => {
+        try {
+          resolve(result.data.routes[0].legs[0].distance.value)
+        } catch(e) {
+          reject(e)
+        }
+      })
   })
 }
 
