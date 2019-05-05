@@ -1,6 +1,6 @@
 const axios = require('axios')
 const connection = require('../../database/mysql')
-const apiKey = require('../../setting/db/config').googleMapKey
+const apiKey = require('../../setting/config').googleMapKey
 const googleMapApi = `https://maps.googleapis.com/maps/api/directions/json?`
 
 const getAllRestaurant = (lat, lng) => {

@@ -4,7 +4,9 @@ const config = {
     'host': '',
     'password': '',
     'user': ''
-  }
+  },
+  'googleMapKey': '',
+  'clientId': ''
 }
 
 module.exports = config
