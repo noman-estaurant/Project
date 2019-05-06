@@ -1,32 +1,69 @@
 const { OAuth2Client } = require('google-auth-library')
-const connection = require('../../database/mysql')
+const jwt = require('jsonwebtoken')
 
+const connection = require('../../database/mysql')
+const secret = require('../../setting/config').secret
 const clientId = require('../../setting/config').clientId
 const client = new OAuth2Client(clientId)
 
-const checkExist = id => {
-  connection.query(
-    `SELECT * FROM user_google WHERE google_id = ${id}`,
-    (err, rows, fields) => {
-      if (rows.length > 0)
-        return true
-      return false
-    }
-  )
+const checkExist = async id => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `SELECT * FROM user_google WHERE google_id = '${id}'`,
+      (err, rows, fields) => {
+        if (rows.length > 0)
+          resolve(true)
+        resolve(false)
+      }
+    )
+  })
+}
+
+const createUser = name => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `INSERT INTO user (name) VALUES ('${name}')`,
+      (err, rows, fields) => {
+        if (err) reject(err)
+        resolve(rows.insertId)
+      }
+    )
+  })
+}
+
+const createUserGoogle = (id, token) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      `INSERT INTO user_google VALUES (${id}, '${token}')`,
+      (err, rows, fields) => {
+        if (err) reject(err)
+        resolve(true)
+      }
+    )
+  })
 }
 
 module.exports = idToken => {
   return new Promise(async (resolve, reject) => {
-    const ticket = await client.verifyIdToken({
-      idToken: req.body['token'],
-      audience: clientId
-    })
-    const payload = ticket.getPayload()
-    const userid = payload['sub']
-    if (checkExist(userid)) {
+    try {
+      const ticket = await client.verifyIdToken({
+        idToken: req.body['token'],
+        audience: clientId
+      })
+      const payload = ticket.getPayload()
+      const userid = payload['sub']
+      if (await checkExist(userid)) {
 
-    } else {
-      
+      } else {
+        const index = await createUser(payload['name'])
+        const result = await createUserGoogle(index, userid)
+        const jwtToken = jwt.sign({index}, secret, {
+          expiresIn: '1d'
+        })
+        resolve(jwtToken)
+      }
+    } catch(e) {
+      reject(e)
     }
   })
 }
