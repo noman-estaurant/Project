@@ -7,9 +7,17 @@ router.get('/', (req, res) => {
 })
 
 router.post('/google', async (req, res) => {
-    // TODO: Create user table
-    //createByGoogle(userid)
-    res.send('開發中')
+    try {
+      const jwt = await createByGoogle(req.body.token)
+      res.status(200).send({
+        status: 'successful',
+        token: jwt
+      })
+    } catch(e) {
+      res.status(500).send({
+        status: 'error',
+      })
+    }
 })
 
 module.exports = router

@@ -12,7 +12,7 @@ const checkExist = async id => {
       `SELECT * FROM user_google WHERE google_id = '${id}'`,
       (err, rows, fields) => {
         if (rows.length > 0)
-          resolve(true)
+          resolve(rows[0].id)
         resolve(false)
       }
     )
@@ -47,13 +47,17 @@ module.exports = idToken => {
   return new Promise(async (resolve, reject) => {
     try {
       const ticket = await client.verifyIdToken({
-        idToken: req.body['token'],
+        idToken,
         audience: clientId
       })
       const payload = ticket.getPayload()
       const userid = payload['sub']
-      if (await checkExist(userid)) {
-
+      const res = await checkExist(userid)
+      if (res !== false) {
+        const jwtToken = jwt.sign({index: res}, secret, {
+          expiresIn: '1d'
+        })
+        resolve(jwtToken)
       } else {
         const index = await createUser(payload['name'])
         const result = await createUserGoogle(index, userid)
