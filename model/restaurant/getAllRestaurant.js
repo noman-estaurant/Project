@@ -1,7 +1,7 @@
 const axios = require('axios')
 const connection = require('../../database/mysql')
-const apiKey = require('../../setting/config').googleMapKey
-const googleMapApi = `https://maps.googleapis.com/maps/api/directions/json?`
+//const apiKey = require('../../setting/config').googleMapKey
+//const googleMapApi = `https://maps.googleapis.com/maps/api/directions/json?`
 
 const getAllRestaurant = (lat, lng) => {
   return new Promise((resolve, reject) => {
@@ -12,7 +12,7 @@ const getAllRestaurant = (lat, lng) => {
         else {
           try {
             for (let i = 0; i < rows.length; i++) {
-              rows[i].distance = await addDuration(lat, lng, rows[i].lat, rows[i].lng)
+              rows[i].wait = Math.floor( Math.random() * 55 + 5 )
             }
             resolve(rows)
           } catch(e) {
@@ -24,7 +24,7 @@ const getAllRestaurant = (lat, lng) => {
   })
 }
 
-const addDuration = (olat, olng, dlat, dlng) => {
+/*const addDuration = (olat, olng, dlat, dlng) => {
   return new Promise((resolve, reject) => {
     axios.get(`${googleMapApi}origin=${olat},${olng}&destination=${dlng},${dlat}&key=${apiKey}`)
       .then(result => {
@@ -35,6 +35,6 @@ const addDuration = (olat, olng, dlat, dlng) => {
         }
       })
   })
-}
+}*/
 
 module.exports = getAllRestaurant
