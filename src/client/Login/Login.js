@@ -61,29 +61,25 @@ class Login extends Component {
 					<h1 class='header'>建立帳戶</h1>
 					<h1 class='subtitle'>註冊帳戶以便我們為您做好最好的服務！</h1>
 				</div>
-				<button class='login-button' id='fb-login' onClick={fbLogin}>
+				<button class='login-button login-button--facebook' onClick={fbLogin}>
 					使用 Facebook 註冊
 				</button>
-				<button class='login-button' id='non-login'>
+				<button class='login-button'>
 					免註冊使用
 				</button>
-				<h1>或</h1>
+				<h1 style={{fontSize: '12pt'}}>或</h1>
 				<div class='button-box'>
 					<GoogleLogin
 						clientId="886865227848-iei3i8t1n5arbur2khuvfdjr3jkd2985.apps.googleusercontent.com"
 						render={renderProps => (
-							<button class='circular-button g-signin2' id='google-login' onClick={renderProps.onClick} disabled={renderProps.disabled}>
-								G
-							</button>
+							<img class='circular-button' src='src/googlePlusLogoButton@3x.png' onClick={renderProps.onClick} disabled={renderProps.disabled} />
 						)}
 						buttonText="Login"
 						onSuccess={() => {window.location.href = '#/main'}}
 						onFailure={() => {console.log('Failure')}}
 						cookiePolicy={'single_host_origin'}
 					/>
-					<button class='circular-button' id='twitter-login'>
-						T
-					</button>
+					<img class='circular-button' src='src/twitterLogoButton@3x.png' />
 				</div>
 				<p id='id' />
 				<p id='name' />

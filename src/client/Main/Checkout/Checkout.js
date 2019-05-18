@@ -1,83 +1,51 @@
 import React, { Component } from 'react'
 import './Checkout.css'
-import Navigationbar from '../Common/Navigationbar'
-import Tabbar from '../Common/Tabbar'
 
 class Checkout extends Component {
+  constructor(props) {
+    super(props)
+  }
 
   componentDidMount() {
-    const mySwiper = new Swiper(".swiper-container", {
-      // Optional parameters
-      direction: "horizontal",
-      pagination: {},
-      on: {
-          // slideChangeTransitionStart: function() {
-          //     if ((this.activeIndex) == 1) {
-          //         $("#button").show("slow");
-          //     }
-          // },
-      },
-    });
+    const getDetail = (title, item, name, detail, money) => {
+      let s = ""
+      s = s + '   <p class="title">' + title + '</p>'
+      let i
+      for (i = 0; i < item; i++) {
+          s = s + '<div class="item">'
+          s = s + '   <p class="name">' + name + ' </p>'
+          s = s + '   <p class="detail">' + detail + '</p>'
+          s = s + '   <p class="howmuch">$ ' + money + '</p>'
+          s = s + '</div>'
+      }
+      return s;
+    }
+    $("#pay").hide()
+    $(".list").append(getDetail("我的主餐", 2, "黑膠鮮檸鮭魚堡", "不要洋蔥，正常", "80"))
   }
 
   render() {
     return (
-      <div>
-        <div class="main">
-            <div class="swiper-container">
-              <div class="swiper-wrapper">
-                  <div class="swiper-slide post-content">
-                      <div id="credit">
-                          <img src="src/16@3x.png" style={{width: '280px', height: '175px'}} />
-                          <div class="shape"> </div>
-                      </div>
-                  </div>
-                  <div class="swiper-slide post-content">
-                      <div id="visa">
-                          <img src="src/20@3x.png" style={{width: '280px', height: '175px'}} />
-                          <div class="shape"></div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-        </div>
-        <div class="data">
-            <div class="total">總金額
-                <div class="howmuch">$ 160</div>
-            </div>
-            <div class="cardno">輸入卡號<br />
-                <div class="box">
-                    <div class="input-border">
-                        <input class="inputs" type="text" maxlength="4" />
-                    </div>
-                    <div class="input-border">
-                        <input class="inputs" type="text" maxlength="4" />
-                    </div>
-                    <div class="input-border">
-                        <input class="inputs" type="text" maxlength="4" />
-                    </div>
-                    <div class="input-border">
-                        <input class="inputs" type="text" maxlength="4" />
-                    </div>
+      <div >
+        <div class="checklist">
+            <div class="container">
+                <div class="list" />
+                <div class="checkout" onClick={() => $("#pay").show()}>結帳 </div>
+                <div class="total">
+                    <p>總金額</p>
+                    <p class="money">$ 160</p>
                 </div>
             </div>
+        </div>
+        <div id="pay" class="pay is-hidden">
+        <div class="modal">
+            <div class="bycredit"><img src="src/credit.png" onClick={() => window.location.href = '#/main/pay'}/></div>
+            <div class="byphone"><img src="src/phone.png" /></div>
+            <div class="cancel-border" onClick={() => $("#pay").hide()}>取消 </div>
+            <div class="cancel">取消</div>
 
-            <div class="carddate">有效期限<br />
-                <div class="box">
-                    <div class="input-border">
-                        <input class="month" type="text" maxlength="2" />
-                        <p>月</p>
-                    </div>
-                    <div class="input-border">
-                        <input class="year" type="text" maxlength="2" />
-                        <p>年</p>
-                    </div>
-                </div>
-            </div>
         </div>
-        <div class="button-border">付款
-            <div class="button">付款</div>
-        </div>
+    </div>
       </div>
     )
   }

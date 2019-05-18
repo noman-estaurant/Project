@@ -6,6 +6,7 @@ import Order from './Order/Order'
 import Menu from './Order/Menu/Menu'
 import Navigationbar from './Common/Navigationbar'
 import ShoppingCart from './ShoppingCart/ShoppingCart'
+import Pay from './Pay/Pay'
 import Checkout from './Checkout/Checkout'
 
 class Main extends Component {
@@ -29,6 +30,7 @@ class Main extends Component {
           />
           <Route path='/main/shoppingcart' render={props => <ShoppingCart {...props} handleBack={() => window.location.href = '#/main'} />} />
           <Route path='/main/checkout' component={Checkout} />
+          <Route path='/main/pay' component={Pay} />
         </div>
       </HashRouter>
     )

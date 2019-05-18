@@ -39,10 +39,26 @@
 	height: 43px;
 	border-radius: 40px;
 	font-size: 14px;
+	background-color: #ffffff;
 }
 
-#fb-login {
+.login-button--facebook {
+	display: flex;
+	align-items: center;
 	background: linear-gradient(to right, rgb(48, 35, 174), rgb(48, 35, 174) 16%, rgb(83, 160, 253));
+	color: #ffffff;
+}
+
+.login-button--facebook::before {
+	content:" ";
+	background-image: url("../../../dist/src/facebookLetterLogo@2x.png");
+	margin-right: 24pt;
+	margin-left: 22pt;
+	width: 9pt;
+	height: 22pt;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
 }
 
 .text {
